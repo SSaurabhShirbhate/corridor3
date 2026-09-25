@@ -1,0 +1,30 @@
+https://saurabh-portfolio.pages.dev/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Cache static assets for 1 year (Performance & SEO Server Score)
+https://saurabh-portfolio.pages.dev/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+https://saurabh-portfolio.pages.dev/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+https://saurabh-portfolio.pages.dev/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+https://saurabh-portfolio.pages.dev/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+https://saurabh-portfolio.pages.dev/*.ktx2
+  Cache-Control: public, max-age=31536000, immutable
+
+https://saurabh-portfolio.pages.dev/*.glb
+  Cache-Control: public, max-age=31536000, immutable
+
+https://saurabh-portfolio.pages.dev/*.mp3
+  Cache-Control: public, max-age=31536000, immutable
+
+https://saurabh-portfolio.pages.dev/fonts/*
+  Cache-Control: public, max-age=31536000, immutable

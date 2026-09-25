@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Saurabh Shirbhate — Resume</title>
+<style>
+  :root {
+    --ink: #1a1917;
+    --paper: #ffffff;
+    --muted: #5b574f;
+    --line: #d9d4c8;
+    --orange: #e0742c;
+    --blue: #1f4a8c;
+    --gold: #b88a2e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    font-size: 10.5pt;
+    line-height: 1.45;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .page { max-width: 210mm; margin: 0 auto; padding: 2mm 4mm; }
+
+  header { border-bottom: 3px solid var(--ink); padding-bottom: 6mm; margin-bottom: 5mm; }
+  .name { font-size: 22pt; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+  .role { font-size: 11pt; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 2px; margin-top: 1mm; }
+  .contact { margin-top: 2.5mm; font-size: 9pt; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2mm 6mm; }
+
+  h2 {
+    font-size: 10pt; text-transform: uppercase; letter-spacing: 2.5px;
+    border-bottom: 1px solid var(--line); padding-bottom: 1mm;
+    margin: 5mm 0 3mm; display: flex; align-items: center; gap: 3mm;
+  }
+  h2 .idx { color: var(--orange); font-weight: 800; }
+
+  .summary { font-size: 10pt; }
+
+  .job { margin-bottom: 4mm; }
+  .job-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .job-title { font-weight: 700; font-size: 11pt; }
+  .job-title .at { color: var(--blue); }
+  .job-date { font-size: 9pt; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .job-domain { font-size: 9pt; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.5mm; }
+  ul { margin: 1.5mm 0 0 4mm; }
+  li { margin-bottom: 1mm; }
+  .tags { margin-top: 1.5mm; display: flex; flex-wrap: wrap; gap: 1.5mm; }
+  .tag {
+    font-size: 8pt; padding: 0.5mm 2mm; border: 1px solid var(--line);
+    border-radius: 2mm; color: var(--muted); background: #faf7f0;
+  }
+  .edu { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .edu-card { border: 1px solid var(--line); border-radius: 2mm; padding: 3mm; }
+  .edu-degree { font-weight: 700; }
+  .edu-school { color: var(--blue); font-size: 9.5pt; }
+  .edu-date { font-size: 8.5pt; color: var(--muted); }
+  .edu-card ul { margin-top: 1mm; }
+
+  .skills { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm 6mm; }
+  .skill-group h3 { font-size: 8.5pt; text-transform: uppercase; letter-spacing: 1.5px; color: var(--orange); margin-bottom: 1mm; }
+  .skill-list { font-size: 9pt; }
+
+  .project { border-left: 3px solid var(--orange); padding-left: 3mm; margin-bottom: 3mm; }
+  .project-title { font-weight: 700; }
+  .project-meta { font-size: 8.5pt; color: var(--muted); }
+  .project p { font-size: 9.5pt; margin-top: 0.5mm; }
+
+  footer { margin-top: 6mm; border-top: 1px solid var(--line); padding-top: 2mm; font-size: 8.5pt; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="name">Saurabh Shirbhate</div>
+      <div class="role">Software Developer</div>
+      <div class="contact">
+        <span>Pune, India</span>
+        <span>showoffbabyy@gmail.com</span>
+        <span>github.com/saurabh</span>
+        <span>linkedin.com/in/saurabh</span>
+        <span>Open to work</span>
+      </div>
+    </header>
+
+    <h2><span class="idx">01</span> Summary</h2>
+    <p class="summary">
+      Software Developer who believes the best systems are the boring ones: predictable, documented and fast.
+      At Sapiens I build the GhostDraft configuration layer that lets insurance products ship in days instead of weeks —
+      Core Java, MySQL, and XML/XSD/JSON document pipelines for P&amp;C products. The same engineer's patience goes into
+      every API, microservice and AI feature I touch, from the database to the browser.
+    </p>
+
+    <h2><span class="idx">02</span> Experience</h2>
+
+    <div class="job">
+      <div class="job-head">
+        <span class="job-title">Associate Technical Analyst <span class="at">@ Sapiens</span></span>
+        <span class="job-date">Apr 2025 — Present</span>
+      </div>
+      <div class="job-domain">Insurance · P&amp;C · GhostDraft product configuration</div>
+      <ul>
+        <li>Own XML/XSD/XSLT document-transformation pipelines that turn analyst-authored rules into running product logic.</li>
+        <li>Develop Core Java + Spring Boot tooling that validates product definitions before they reach a build.</li>
+        <li>Model P&amp;C business rules as structured, versioned GhostDraft configuration persisted in MySQL.</li>
+        <li>Run the Scrum cadence — document automation, workflow management, and troubleshooting configuration defects.</li>
+        <li>Result: product rollouts that took weeks now take days; config defects caught at authoring time.</li>
+      </ul>
+      <div class="tags"><span class="tag">Core Java</span><span class="tag">Spring Boot</span><span class="tag">MySQL</span><span class="tag">GhostDraft</span><span class="tag">XML / XSD / JSON</span><span class="tag">Scrum</span></div>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <span class="job-title">Web Development Intern <span class="at">@ Mine8 Automations, Nagpur</span></span>
+        <span class="job-date">Dec 2022 — Jun 2023</span>
+      </div>
+      <div class="job-domain">Client-facing web experiences</div>
+      <ul>
+        <li>Built and maintained responsive client-facing web pages and interactive components.</li>
+        <li>Converted design mockups into cross-browser layouts; introduced code reviews within the small team.</li>
+      </ul>
+      <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">jQuery</span><span class="tag">Bootstrap</span></div>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <span class="job-title">Full-Stack Developer — Independent Projects</span>
+        <span class="job-date">2023 — 2025</span>
+      </div>
+      <div class="job-domain">End-to-end product engineering with AI</div>
+      <ul>
+        <li>LedgerLens — a Spring Boot microservices expense tracker (ledger, categorisation, insights) with AI integration; MySQL persistence, Dockerised deployments.</li>
+        <li>PolicyPal AI — an LLM + RAG assistant that answers questions from policy documents with strict citations.</li>
+        <li>Designed schemas, built REST microservices, shipped React/TypeScript frontends, containerized with Docker.</li>
+      </ul>
+      <div class="tags"><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Spring Boot</span><span class="tag">MySQL</span><span class="tag">Docker</span><span class="tag">LLM / AI</span></div>
+    </div>
+
+    <h2><span class="idx">03</span> Education</h2>
+    <div class="edu">
+      <div class="edu-card">
+        <div class="edu-degree">Bachelor of Engineering</div>
+        <div class="edu-school">GH Raisoni College of Engineering, Nagpur</div>
+        <div class="edu-date">2019 — 2023</div>
+        <ul>
+          <li>Foundation in data structures, DBMS and software engineering</li>
+          <li>Led academic projects end-to-end</li>
+        </ul>
+      </div>
+      <div class="edu-card">
+        <div class="edu-degree">PG-DAC</div>
+        <div class="edu-school">CDAC, Pune</div>
+        <div class="edu-date">2024</div>
+        <ul>
+          <li>Java full-stack specialization: Spring Boot, Hibernate, REST, SQL</li>
+          <li>Frontend integration with React</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2><span class="idx">04</span> Skills</h2>
+    <div class="skills">
+      <div class="skill-group">
+        <h3>Backend Core</h3>
+        <div class="skill-list">Java · Spring Boot · Hibernate · REST APIs · Microservices · System Design</div>
+      </div>
+      <div class="skill-group">
+        <h3>Frontend &amp; UI</h3>
+        <div class="skill-list">React · JavaScript · TypeScript · Tailwind CSS · Next.js</div>
+      </div>
+      <div class="skill-group">
+        <h3>Data &amp; Storage</h3>
+        <div class="skill-list">SQL · MySQL · PostgreSQL · MongoDB</div>
+      </div>
+      <div class="skill-group">
+        <h3>DevOps &amp; Tools</h3>
+        <div class="skill-list">Docker · Git · GitHub · AWS / Cloud · Maven · Postman</div>
+      </div>
+      <div class="skill-group">
+        <h3>Intelligence &amp; Modern</h3>
+        <div class="skill-list">AI Tools · Modern Development Tools</div>
+      </div>
+    </div>
+
+    <h2><span class="idx">05</span> Projects</h2>
+    <div class="project">
+      <div class="project-title">FCBankers <span class="project-meta">· Sapiens · 2025</span></div>
+      <p>GhostDraft configuration layer — Core Java, MySQL, XML/XSD/JSON — letting markets configure insurance products without a developer in the loop. Rollout time dropped from weeks to days.</p>
+    </div>
+    <div class="project">
+      <div class="project-title">StarrKInsurance <span class="project-meta">· Sapiens · 2025</span></div>
+      <p>Policy technical analysis on the GhostDraft configurator: automated document generation, managed workflows, and scrum-driven troubleshooting of configuration defects.</p>
+    </div>
+    <div class="project">
+      <div class="project-title">PolicyPal AI <span class="project-meta">· 2026</span></div>
+      <p>LLM + RAG assistant answering questions from policy documents with strict citations — Java + Spring Boot over embedded policy PDFs, React front-end.</p>
+    </div>
+    <div class="project">
+      <div class="project-title">LedgerLens <span class="project-meta">· 2026</span></div>
+      <p>Microservices expense tracker with AI integration — ledger, categorisation and insights services; MySQL persistence, Dockerised, AI auto-categorises spending.</p>
+    </div>
+
+    <footer>
+      Saurabh Shirbhate — Software Developer · Pune, India · showoffbabyy@gmail.com
+    </footer>
+  </div>
+</body>
+</html>

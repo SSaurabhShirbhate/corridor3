@@ -1,0 +1,180 @@
+import { useMemo, memo } from 'react';
+import { Text } from '@react-three/drei';
+import * as THREE from 'three';
+
+import CorridorWalls from './CorridorWalls';
+import DoorSection from './DoorSection';
+import SegmentDoors from './SegmentDoors';
+import Avatar from './Avatar';
+import HeroText from './HeroText';
+import Doodles from './Doodles';
+import CorridorDecorations from './CorridorDecorations';
+import {
+    SEGMENT_LENGTH,
+    START_Z,
+    WALL_X_OUTER,
+    WALL_X_INNER,
+    DOOR_Z_SPAN,
+    WALL_ANGLE,
+    DOOR_OFFSETS
+} from '../../../config/corridorConfig';
+
+/**
+ * CorridorSegment Component
+ * 
+ * A single repeatable chunk of the infinite corridor.
+ * Each segment contains: walls, avatar, SAURABH text, doors, decorations.
+ * 
+ * Segment length: 80 units
+ * Positioned based on segmentIndex * segmentLength
+ */
+
+
+const CorridorSegment = ({
+    segmentIndex = 0,
+    onDoorEnter,
+    hideSegmentDoors = false, // Hide only SegmentDoors while keeping content preloaded
+    zClip = 100000, // Clipping plane (render everything with Z < zClip)
+    setCameraOverride // Function to take over camera control
+}) => {
+
+    // Calculate Z offset based on segment index
+    // Segment 0 starts at Z=10, goes to Z=-70
+    const zOffset = START_Z - (segmentIndex * SEGMENT_LENGTH);
+
+    // Door positions within this segment (relative to segment start)
+    const doors = useMemo(() => {
+        const doorDefs = DOOR_OFFSETS.map((door, index) => ({
+            id: `${door.roomId}-${segmentIndex}`,
+            roomId: door.roomId,
+            relativeZ: door.relativeZ,
+            side: door.side,
+            label: index === 0
+                ? 'THE GALLERY'
+                : index === 1
+                ? 'THE STUDIO'
+                : index === 2
+                ? 'THE ABOUT'
+                : "LET'S CONNECT",
+            icon: index === 0
+                ? '◈'
+                : index === 1
+                ? '▶'
+                : index === 2
+                ? '★'
+                : '✉',
+            color: index === 0
+                ? '#f5efe6'
+                : index === 1
+                ? '#e6f5ef'
+                : index === 2
+                ? '#efe6f5'
+                : '#f5e6e6',
+            enterDistance: door.roomId === 'about' ? 25 : undefined
+        }));
+
+        return doorDefs.map(def => {
+            // Calculate adjusted Position and Rotation for Sawtooth Walls
+            const xBase = (WALL_X_OUTER + WALL_X_INNER) / 2; // Midpoint of the angled wall
+            const xPos = def.side === 'left' ? -xBase : xBase;
+
+            // Rotation:
+            // Left Wall: Normal was (1,0,0) [RotY 90]. Now angle it towards camera (+Z).
+            // Rotate Clockwise by WALL_ANGLE.
+            // Right Wall: Normal was (-1,0,0) [RotY -90]. Angle towards camera (+Z).
+            // Rotate Counter-Clockwise by WALL_ANGLE.
+
+            const baseRot = def.side === 'left' ? Math.PI / 2 : -Math.PI / 2;
+            const rotOffset = def.side === 'left' ? -WALL_ANGLE : WALL_ANGLE;
+
+            return {
+                ...def,
+                x: xPos,
+                rotation: baseRot + rotOffset
+            };
+        });
+    }, [segmentIndex]);
+
+    return (
+        <group position={[0, 0, 0]}>
+            {/* === CORRIDOR WALLS === */}
+            {/* Pass door positions so walls can generate gaps/angles correctly */}
+            <CorridorWalls
+                zStart={zOffset}
+                length={SEGMENT_LENGTH}
+                doorPositions={doors}
+                zClip={zClip}
+            />
+
+            {/* === WELCOME AREA (Start of segment) - MOVED CLOSER === */}
+            <group position={[0, 0, zOffset - 2]}>
+                {/* SAURABH Text - centered (letters adjusted internally) */}
+                <HeroText position={[0, -0.1, -0.5]} />
+
+                {/* Avatar stands to the right so the name stays readable */}
+                <Avatar position={[1.55, -0.85, 0.2]} />
+
+
+                {/* Doodles around avatar */}
+                <Doodles />
+
+                {/* Segment number (debug - can remove later) */}
+                <Text
+                    position={[1.7, 1.4, 0.3]}
+                    fontSize={0.12}
+                    color="#ccc"
+                    anchorX="center"
+                >
+                    #{segmentIndex}
+                </Text>
+            </group>
+
+            {/* === DOOR SECTIONS (wall + door + label as one unit) === */}
+            {/* Hidden during entrance animation for segment -1 */}
+            {!hideSegmentDoors && doors.map((door) => (
+                <DoorSection
+                    key={door.id}
+                    position={[
+                        door.x,
+                        0,
+                        zOffset + door.relativeZ + 2
+                    ]}
+                    side={door.side}
+                    label={door.label}
+                    roomId={door.roomId}
+                    icon={door.icon}
+                    color={door.color}
+                    enterDistance={door.enterDistance}
+                    onEnter={() => onDoorEnter?.(door.roomId)}
+                    setCameraOverride={setCameraOverride}
+                    segmentIndex={segmentIndex}
+                />
+            ))}
+
+            {/* === LIGHTING === */}
+            {/* pointLight removed for optimization as it didn't affect visuals significantly */}
+
+            <CorridorDecorations
+                segmentLength={SEGMENT_LENGTH}
+                zOffset={zOffset}
+                corridorWidth={WALL_X_OUTER * 2}
+                corridorHeight={3.5}
+                zClip={zClip}
+                setCameraOverride={setCameraOverride}
+            />
+
+            {/* === SEGMENT END DOORS (hidden during entrance) === */}
+            {!hideSegmentDoors && (
+                <SegmentDoors
+                    position={[0, 0, zOffset - SEGMENT_LENGTH + 5]}
+                    corridorHeight={3.5}
+                />
+            )}
+        </group>
+    );
+};
+
+const MemoizedCorridorSegment = memo(CorridorSegment);
+
+export { SEGMENT_LENGTH, WALL_X_OUTER, WALL_X_INNER, DOOR_Z_SPAN };
+export default MemoizedCorridorSegment;
