@@ -85,13 +85,13 @@ const RoomInterior = memo(({ label, showRoom, onReady, isExiting }) => {
         bbRight.repeat.set(corridorDepth / NATURAL_TILE_W, 1);
 
         return {
-            corridorFloor: new THREE.MeshBasicMaterial({ color: '#e0e0e0',  map: floorTex, side: THREE.DoubleSide }),
-            corridorWallL: new THREE.MeshBasicMaterial({ color: '#e0e0e0',  map: wallTexL, side: THREE.DoubleSide }),
-            corridorWallR: new THREE.MeshBasicMaterial({ color: '#e0e0e0',  map: wallTexR, side: THREE.DoubleSide }),
-            corridorCeiling: new THREE.MeshBasicMaterial({ color: '#e0e0e0',  map: ceilTex, side: THREE.DoubleSide }),
-            bbLeft: new THREE.MeshBasicMaterial({ color: '#e0e0e0',  map: bbLeft, side: THREE.DoubleSide }),
-            bbRight: new THREE.MeshBasicMaterial({ color: '#e0e0e0',  map: bbRight, side: THREE.DoubleSide }),
-            threshold: new THREE.MeshBasicMaterial({ color: '#e0e0e0', 
+            corridorFloor: new THREE.MeshBasicMaterial({ color: '#ffffff',  map: floorTex, side: THREE.DoubleSide }),
+            corridorWallL: new THREE.MeshBasicMaterial({ color: '#ffffff',  map: wallTexL, side: THREE.DoubleSide }),
+            corridorWallR: new THREE.MeshBasicMaterial({ color: '#ffffff',  map: wallTexR, side: THREE.DoubleSide }),
+            corridorCeiling: new THREE.MeshBasicMaterial({ color: '#ffffff',  map: ceilTex, side: THREE.DoubleSide }),
+            bbLeft: new THREE.MeshBasicMaterial({ color: '#ffffff',  map: bbLeft, side: THREE.DoubleSide }),
+            bbRight: new THREE.MeshBasicMaterial({ color: '#ffffff',  map: bbRight, side: THREE.DoubleSide }),
+            threshold: new THREE.MeshBasicMaterial({ color: '#ffffff', 
                 map: (() => {
                     const t = bbTexSrc.clone();
                     t.needsUpdate = true;

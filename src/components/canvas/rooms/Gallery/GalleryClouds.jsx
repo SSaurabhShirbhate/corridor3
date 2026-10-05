@@ -29,8 +29,8 @@ const GalleryClouds = ({ count = 12, seed = 42, rotationOffset = [0, -Math.PI / 
         const random = seededRandom(seed);
 
         for (let i = 0; i < count; i++) {
-            const y = 6 + random() * 8; // High above
-            const z = -5 - random() * 30; // Depth variation
+            const y = 7 + random() * 7; // High above
+            const z = -12 - random() * 28; // Depth variation (kept in the distance)
             const driftSpeed = 0.1 + random() * 0.15;
 
             // Równomierny offset dla każdej chmury - rozłożone po całej szerokości
@@ -43,8 +43,8 @@ const GalleryClouds = ({ count = 12, seed = 42, rotationOffset = [0, -Math.PI / 
             items.push({
                 id: i,
                 position: [initialX, y, z],  // Pozycja już przeliczona!
-                scale: 0.5 + random() * 1.2,
-                opacity: 0.4 + random() * 0.3,
+                scale: 0.6 + random() * 1.4,
+                opacity: 0.72 + random() * 0.28,
                 textureIndex: Math.floor(random() * CLOUD_TEXTURES.length),
                 driftSpeed: driftSpeed,
                 initialOffset: initialOffset,  // Zapamiętaj offset do animacji
@@ -85,21 +85,9 @@ const StaticCloud = ({ position, scale, opacity, textureIndex, driftSpeed, initi
     // Load the specific cloud texture
     const texture = useLoader(THREE.TextureLoader, CLOUD_TEXTURES[textureIndex]);
 
-    // LEGACY FIX: Use original aspect ratios to prevent stretching after POT conversion
-    const legacyCloudAspects = {
-        '1131c3eb-dfae-423f-924b-ff39d8ccd6dc.webp': 1.894,
-        '254b8ec8-d6f7-4275-956f-7bab65b2ce2d.webp': 2.459,
-        '2cc88dd1-483c-466d-b07e-f8308c61ccbe.webp': 3.577,
-        '5606fcc0-3252-447d-a58a-7bcbac73229a.webp': 1.794,
-        '7882dc72-3d01-41fb-ac0e-d07b0184ebc1.webp': 1.997,
-        '9b2ca72f-7bd0-473b-ba6e-dd9e0eb79d35.webp': 1.905,
-        'c83293c6-d90c-4a32-8d9d-5ac9af7e2296.webp': 3,
-        'f6e358bc-d27c-41dd-95f4-6787a835c41e.webp': 1.875
-    };
-
-    const cloudFile = CLOUD_TEXTURES[textureIndex].split('/').pop();
-    const aspectRatio = legacyCloudAspects[cloudFile] || 1.8;
-    const width = 2.5 * scale;
+    // Every cloud texture is exported as a 2:1 billboard canvas
+    const aspectRatio = 2.0;
+    const width = 3.6 * scale;
     const height = width / aspectRatio;
 
     useFrame(({ camera, clock }) => {
@@ -124,7 +112,7 @@ const StaticCloud = ({ position, scale, opacity, textureIndex, driftSpeed, initi
     return (
         <mesh ref={meshRef} position={position}>
             <planeGeometry args={[width, height]} />
-            <meshBasicMaterial color="#e0e0e0"
+            <meshBasicMaterial color="#ffffff"
                 map={texture}
                 transparent
                 opacity={opacity}

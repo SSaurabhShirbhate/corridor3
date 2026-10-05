@@ -29,7 +29,7 @@ const SignSystem = (props) => {
             {/* No rotation needed as the texture is already horizontal */}
             <mesh position={[-0.05, 2.05, 0.65]}>
                 <planeGeometry args={[2.7, 0.4]} />
-                <meshBasicMaterial color="#e0e0e0" map={mountTexture} transparent={true} side={THREE.DoubleSide} />
+                <meshBasicMaterial color="#ffffff" map={mountTexture} transparent={true} side={THREE.DoubleSide} />
             </mesh>
 
             {/* 2. THE SIGN (SignGroup) */}
@@ -45,7 +45,7 @@ const SignSystem = (props) => {
                 >
                     {/* Width 2.6 (Narrower), Height 1 */}
                     <planeGeometry args={[2, 1]} />
-                    <meshBasicMaterial color="#e0e0e0"
+                    <meshBasicMaterial color="#ffffff"
                         map={signTexture}
                         transparent={true}
                         side={THREE.DoubleSide}

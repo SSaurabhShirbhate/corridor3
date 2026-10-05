@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
+import { setMuted as setBgmMuted } from '../utils/audioManager';
 
 const AudioContext = createContext({
     isMuted: false,
@@ -47,6 +48,11 @@ export const AudioProvider = ({ children }) => {
         });
 
     }, [isMuted, globalVolume]);
+
+    // Keep the background music mute state in sync with the UI/SFX mute toggle
+    useEffect(() => {
+        setBgmMuted(isMuted);
+    }, [isMuted]);
 
     const toggleMute = () => setIsMuted(prev => !prev);
 

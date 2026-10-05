@@ -433,15 +433,38 @@ const NavigationUI = () => {
                     <div className="audio-card">
                         <div className="audio-header">
                             <h3>AUDIO SETTINGS</h3>
-                            <button
-                                className="close-btn"
-                                onClick={() => setIsAudioMenuOpen(false)}
-                                aria-label="Close audio settings"
-                            >
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M18 6L6 18M6 6l12 12" />
-                                </svg>
-                            </button>
+                            <div className="audio-header-actions">
+                                <button
+                                    className={`audio-mute-toggle ${isMuted ? 'muted' : 'unmuted'}`}
+                                    onClick={toggleMute}
+                                    aria-pressed={isMuted}
+                                    aria-label={isMuted ? 'Unmute audio' : 'Mute audio'}
+                                >
+                                    {isMuted ? (
+                                        <svg viewBox="0 0 24 24" className="icon-audio">
+                                            <path d="M11 5L6 9H2v6h4l5 4V5z" />
+                                            <line x1="23" y1="9" x2="17" y2="15" />
+                                            <line x1="17" y1="9" x2="23" y2="15" />
+                                        </svg>
+                                    ) : (
+                                        <svg viewBox="0 0 24 24" className="icon-audio">
+                                            <path d="M11 5L6 9H2v6h4l5 4V5z" />
+                                            <path d="M15 9a5 5 0 0 1 0 6" />
+                                            <path d="M18 5a9 9 0 0 1 0 14" />
+                                        </svg>
+                                    )}
+                                    <span>{isMuted ? 'MUTED' : 'ON'}</span>
+                                </button>
+                                <button
+                                    className="close-btn"
+                                    onClick={() => setIsAudioMenuOpen(false)}
+                                    aria-label="Close audio settings"
+                                >
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M18 6L6 18M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div className="audio-sliders-container">
                             <div className="slider-group">

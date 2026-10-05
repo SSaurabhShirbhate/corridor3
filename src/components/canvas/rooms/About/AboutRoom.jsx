@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Text, PositionalAudio } from '@react-three/drei';
+import { Text, PositionalAudio, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import PaperAirplane from './PaperAirplane';
 import InfiniteSkyManager from './InfiniteSkyManager';
@@ -8,6 +8,52 @@ import StoryMilestone from './StoryMilestone';
 import { useScene } from '../../../../context/SceneContext';
 import { useAchievements } from '../../../../context/AchievementsContext';
 import { useAudio } from '../../../../context/AudioManager';
+
+// Small drifting flock of birds that lives in the About sky
+function SkyBirds() {
+    const birdsTexture = useTexture('/textures/gallery/bird_gray.webp');
+    const groupRef = useRef();
+    const birds = useMemo(
+        () =>
+            [
+                { x: -14, y: 6, z: -60, s: 1.0, p: 0 },
+                { x: -11, y: 7.2, z: -64, s: 0.85, p: 1.1 },
+                { x: -8.5, y: 6.4, z: -58, s: 0.75, p: 2.2 },
+                { x: 12, y: 9, z: -78, s: 0.9, p: 0.6 },
+                { x: 14.5, y: 8.2, z: -82, s: 0.7, p: 1.7 },
+            ].map((b) => ({ ...b, baseX: b.x, baseY: b.y })),
+        []
+    );
+
+    useFrame((state) => {
+        if (!groupRef.current) return;
+        const t = state.clock.elapsedTime;
+        groupRef.current.children.forEach((mesh, i) => {
+            const b = birds[i];
+            if (!b) return;
+            mesh.position.x = b.baseX + Math.sin(t * 0.15 + b.p) * 2.2;
+            mesh.position.y = b.baseY + Math.sin(t * 0.6 + b.p) * 0.4;
+        });
+    });
+
+    return (
+        <group ref={groupRef}>
+            {birds.map((b, i) => (
+                <mesh key={i} position={[b.x, b.y, b.z]}>
+                    <planeGeometry args={[0.9 * b.s, 0.9 * b.s / 2]} />
+                    <meshBasicMaterial
+                        map={birdsTexture}
+                        transparent
+                        alphaTest={0.1}
+                        depthWrite={false}
+                        color="#8a8a8a"
+                        side={THREE.DoubleSide}
+                    />
+                </mesh>
+            ))}
+        </group>
+    );
+}
 
 // Chunk length for looping flight effect (matches SkyChunk)
 const CHUNK_LENGTH = 40;
@@ -68,6 +114,10 @@ const AboutRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
     // Ref for the entire room to manage frustum culling
     const roomRef = useRef();
     const airplaneGroupRef = useRef();
+
+    const skyTexture = useTexture('/textures/about/sky_gradient.webp');
+    const cloudSeaTexture = useTexture('/textures/about/cloud_sea.webp');
+    const sunGlowTexture = useTexture('/textures/about/sun_glow.webp');
 
     // Reset camera rotation when teleporting starts
     useEffect(() => {
@@ -251,10 +301,45 @@ const AboutRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
             <InfiniteSkyManager scrollProgressRef={scrollPosition} />
 
             {/* === SKY BACKDROP === */}
-            <mesh position={[0, 0, -200]}>
-                <planeGeometry args={[300, 150]} />
-                <meshBasicMaterial color="#87CEEB" side={THREE.DoubleSide} />
+            <mesh position={[0, 0, -110]}>
+                <planeGeometry args={[800, 400]} />
+                <meshBasicMaterial map={skyTexture} fog={false} side={THREE.DoubleSide} depthWrite={false} />
             </mesh>
+
+            {/* === SUN GLOW (upper half of the gradient sky) === */}
+            <mesh position={[20, 14, -106]}>
+                <planeGeometry args={[70, 70]} />
+                <meshBasicMaterial
+                    map={sunGlowTexture}
+                    transparent
+                    depthWrite={false}
+                    fog={false}
+                    blending={THREE.AdditiveBlending}
+                />
+            </mesh>
+
+            {/* === WHITE CLOUD SEA (fills the lower half of the scene) === */}
+            {[
+                { z: -104, y: -9.5, o: 1.0 },
+                { z: -82, y: -8.2, o: 0.98 },
+                { z: -58, y: -7.0, o: 0.96 },
+                { z: -34, y: -5.8, o: 0.94 },
+            ].map((layer) => (
+                <mesh key={layer.z} position={[0, layer.y, layer.z]}>
+                    <planeGeometry args={[200, 48]} />
+                    <meshBasicMaterial
+                        map={cloudSeaTexture}
+                        transparent
+                        opacity={layer.o}
+                        depthWrite={false}
+                        fog={false}
+                        side={THREE.DoubleSide}
+                    />
+                </mesh>
+            ))}
+
+            {/* === BIRDS === */}
+            <SkyBirds />
         </group>
     );
 };

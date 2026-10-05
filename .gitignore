@@ -22,6 +22,12 @@ portfolio-fresh
 *.tmp
 *.tmp.*
 
+# Texture backups / reference source images (kept locally, not shipped)
+public/textures/**/backups/
+public/textures/**/backups_v2_preRef/
+public/textures/**/refs/
+public/textures/**/backups_*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

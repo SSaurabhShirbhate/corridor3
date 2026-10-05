@@ -25,8 +25,6 @@ export const ENTRANCE_TEXTURES = [
     '/textures/entrance/cat_front_body.webp',
     '/textures/entrance/window_sketch.webp',
     '/textures/entrance/avatar_window.webp',
-    '/textures/entrance/tree_sketch.webp',
-    '/textures/entrance/mouse_hanging.webp',
     '/textures/entrance/pot_with_duck.webp',
     '/textures/entrance/bug_sketch.webp',
     '/textures/entrance/speech_bubble.webp',
@@ -181,6 +179,10 @@ export const CONTACT_TEXTURES = [
 export const ABOUT_TEXTURES = [
     // Avatar
     '/textures/about/awatarnachmurce.webp',
+    // Sky
+    '/textures/about/sky_gradient.webp',
+    '/textures/about/cloud_sea.webp',
+    '/textures/about/sun_glow.webp',
     // Awards
     '/textures/about/SOTY.webp',
     '/textures/about/SOTY_painted.webp',

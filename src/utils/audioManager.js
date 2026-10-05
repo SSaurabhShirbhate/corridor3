@@ -52,6 +52,16 @@ export const toggleMute = () => {
     return isMuted;
 };
 
+// Explicitly set the muted state so the React audio context can keep the
+// background music in sync with the SFX mute toggle.
+export const setMuted = (value) => {
+    isMuted = !!value;
+    if (bgMusicAudio) {
+        bgMusicAudio.muted = isMuted;
+    }
+    return isMuted;
+};
+
 export const getIsMuted = () => isMuted;
 
 export const setMusicVolume = (vol) => {

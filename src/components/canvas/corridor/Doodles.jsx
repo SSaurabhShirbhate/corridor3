@@ -156,7 +156,7 @@ const SketchElement = ({
             {/* Shadow layer */}
             <mesh position={[0.01, -0.01, -0.01]}>
                 <planeGeometry args={[dimensions.width, dimensions.height]} />
-                <meshBasicMaterial color="#e0e0e0"
+                <meshBasicMaterial color="#ffffff"
                     map={texture}
                     transparent={true}
                     opacity={0.15}
@@ -168,7 +168,7 @@ const SketchElement = ({
             {/* Main element */}
             <mesh>
                 <planeGeometry args={[dimensions.width, dimensions.height]} />
-                <meshBasicMaterial color="#e0e0e0"
+                <meshBasicMaterial color="#ffffff"
                     map={texture}
                     transparent={true}
                     side={THREE.DoubleSide}

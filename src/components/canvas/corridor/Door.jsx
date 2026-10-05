@@ -175,7 +175,7 @@ const Door = ({
                 {/* Label background (middle layer) */}
                 <mesh position={[0, 0, -0.01]}>
                     <planeGeometry args={[label.length * 0.08 + 0.3, 0.25]} />
-                    <meshBasicMaterial color="#e0e0e0" />
+                    <meshBasicMaterial color="#ffffff" />
                 </mesh>
 
                 {/* Label text (front layer) */}
@@ -208,7 +208,7 @@ const Door = ({
             <mesh position={[0, -0.2, -0.05]} rotation={[0, Math.PI, 0]}>
                 <planeGeometry args={[doorWidth + 0.3, doorHeight + 0.3]} />
                 <meshBasicMaterial
-                    color="#e0e0e0"
+                    color="#ffffff"
                     transparent={true}
                     opacity={glowIntensity} // Dynamic opacity based on proximity
                     depthWrite={false}

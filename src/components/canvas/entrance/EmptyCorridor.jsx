@@ -76,7 +76,7 @@ const CorridorSegmentEmpty = ({ zStart, corridorWidth, corridorHeight, floorText
                     alphaTest={0.1}
                     roughness={1}
                     metalness={0}
-                    color="#e0e0e0" // Keep white base
+                    color="#ffffff" // Keep white base
                 />
             </mesh>
 

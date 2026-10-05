@@ -74,7 +74,7 @@ const FALLBACK_PROJECTS = [
 ];
 
 const PROJECT_COUNT = 10; // Keep the count for the infinite scroll feel
-const GAP = 2.5;
+const GAP = 3.0; // Spaced so hanging project cards never overlap on the line
 
 // Zmień te wartości aby dopasować proporcje ptaka (legacy ratio 1.41)
 const BIRD_WIDTH = 0.49;
@@ -366,6 +366,7 @@ const GalleryRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
     const cityTexture = useTexture('/textures/gallery/miastotlo.webp');
     const birdTexture = useTexture('/textures/gallery/bird_gray.webp');
     const clothespinTexture = useTexture('/textures/gallery/klamerka.webp');
+    const skyTexture = useTexture('/textures/gallery/sky_gradient.webp');
 
     useEffect(() => {
         if (floorTexture) {
@@ -384,20 +385,20 @@ const GalleryRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
     const materials = useMemo(() => {
         const floorMat = new THREE.MeshBasicMaterial({
             map: floorTexture,
-            color: '#e0e0e0',
+            color: '#ffffff',
             side: THREE.DoubleSide
         });
         floorMat.onBeforeCompile = onBeforeCompile;
         floorMat.transparent = true;
         floorMat.needsUpdate = true;
         
-        const ropeMat = new THREE.MeshBasicMaterial({ color: '#666666' });
+        const ropeMat = new THREE.MeshBasicMaterial({ color: '#9c7a54' });
         ropeMat.onBeforeCompile = onBeforeCompile;
         ropeMat.transparent = true;
         ropeMat.needsUpdate = true;
 
         const thresholdMat = new THREE.MeshBasicMaterial({
-            color: '#e0e0e0',
+            color: '#ffffff',
             map: (() => {
                 const t = new THREE.TextureLoader().load('/textures/corridor/texturadoprogow.webp');
                 t.colorSpace = THREE.SRGBColorSpace;
@@ -482,7 +483,7 @@ const GalleryRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
                 {/* Railing */}
                 <mesh position={[0, RAILING_HEIGHT / 2, -3.9]}>
                     <planeGeometry args={[20, RAILING_HEIGHT]} />
-                    <meshBasicMaterial color="#e0e0e0"
+                    <meshBasicMaterial color="#ffffff"
                         map={railingTexture}
                         transparent={true}
                         side={THREE.DoubleSide}
@@ -532,7 +533,7 @@ const GalleryRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
                 {/* Houses - center */}
                 <mesh position={[0, -1, -9]} scale={[1, 1, 1]}>
                     <planeGeometry args={[15, 15 / 2.357]} />
-                    <meshBasicMaterial color="#e0e0e0"
+                    <meshBasicMaterial color="#ffffff"
                         map={housesTexture}
                         transparent={true}
                         alphaTest={0.1}
@@ -543,7 +544,7 @@ const GalleryRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
                 {/* Houses - left side (mirrored) */}
                 <mesh position={[-15, -1, -9]} scale={[-1, 1, 1]}>
                     <planeGeometry args={[15, 15 / 2.357]} />
-                    <meshBasicMaterial color="#e0e0e0"
+                    <meshBasicMaterial color="#ffffff"
                         map={housesTexture}
                         transparent={true}
                         alphaTest={0.1}
@@ -560,9 +561,9 @@ const GalleryRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
                 />
 
                 {/* City skyline - center */}
-                <mesh position={[0, 3.4, -17]} scale={[1, 1, 1]}>
+                <mesh position={[0, 2.2, -17]} scale={[1, 1, 1]}>
                     <planeGeometry args={[30, 30 / 2.357]} />
-                    <meshBasicMaterial color="#e0e0e0"
+                    <meshBasicMaterial color="#ffffff"
                         map={cityTexture}
                         transparent={true}
                         alphaTest={0.1}
@@ -571,9 +572,9 @@ const GalleryRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
                     />
                 </mesh>
                 {/* City skyline - left (mirrored) */}
-                <mesh position={[-30, 3.4, -17]} scale={[-1, 1, 1]}>
+                <mesh position={[-30, 2.2, -17]} scale={[-1, 1, 1]}>
                     <planeGeometry args={[30, 30 / 2.357]} />
-                    <meshBasicMaterial color="#e0e0e0"
+                    <meshBasicMaterial color="#ffffff"
                         map={cityTexture}
                         transparent={true}
                         alphaTest={0.1}
@@ -582,9 +583,9 @@ const GalleryRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
                     />
                 </mesh>
                 {/* City skyline - right (mirrored) */}
-                <mesh position={[30, 3.4, -17]} scale={[-1, 1, 1]}>
+                <mesh position={[30, 2.2, -17]} scale={[-1, 1, 1]}>
                     <planeGeometry args={[30, 30 / 2.357]} />
-                    <meshBasicMaterial color="#e0e0e0"
+                    <meshBasicMaterial color="#ffffff"
                         map={cityTexture}
                         transparent={true}
                         alphaTest={0.1}
@@ -597,12 +598,12 @@ const GalleryRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
                 <FlyingBird texture={birdTexture} />
 
                 {/* Clouds scattered above */}
-                <GalleryClouds count={65} seed={123} />
+                <GalleryClouds count={36} seed={123} />
 
                 {/* Skybox/Environment */}
                 <mesh position={[0, 5, -20]}>
                     <sphereGeometry args={[40, 32, 32]} />
-                    <meshBasicMaterial color="#f0f0f0" side={THREE.BackSide} transparent opacity={0.5} onBeforeCompile={onBeforeCompile} />
+                    <meshBasicMaterial map={skyTexture} side={THREE.BackSide} fog={false} />
                 </mesh>
             </group>
         </group>
@@ -676,7 +677,7 @@ const FlyingBird = ({ texture }) => {
     return (
         <mesh ref={birdRef} position={[startX, 4.5, -10]} scale={[BIRD_WIDTH, BIRD_HEIGHT, 1]}>
             <planeGeometry args={[1.5, 1.5]} />
-            <meshBasicMaterial color="#e0e0e0"
+            <meshBasicMaterial color="#ffffff"
                 map={texture}
                 transparent={true}
                 alphaTest={0.1}
@@ -946,28 +947,42 @@ const ProjectCard = memo(forwardRef(({ index, project, clothespinTexture, curren
         if (!cardRef.current) return;
 
         // Custom GSAP Paint logic for texts
-        // We delay the text reveal slightly so the card paints first (p > 0.4)
+        // The project title is always readable on the card front; the back-of-card
+        // texts still fade in with the paint progression so they only show when flipped.
         if (textRef.current && paintProgress) {
             const p = paintProgress.value;
-            // Instantly reveal if we teleported
-            const expectedOpacity = p >= 1.0 ? 1.0 : THREE.MathUtils.clamp((p - 0.3) * 2.0, 0.0, 1.0);
-            
-            if (textRef.current.fillOpacity !== expectedOpacity) {
-                const applyOpacity = (ref) => {
-                    if (ref.current) {
-                        ref.current.fillOpacity = expectedOpacity;
-                        if (ref.current.material) {
-                            ref.current.material.opacity = expectedOpacity;
-                            ref.current.material.transparent = true;
-                        }
-                    }
-                };
-                applyOpacity(textRef);
-                applyOpacity(detailsTextRef1);
-                applyOpacity(detailsTextRef2);
-                applyOpacity(techTextRef);
-                applyOpacity(openTextRef);
+
+            // Front title: keep it clearly visible, only slightly delayed by the paint pass
+            const titleOpacity = THREE.MathUtils.clamp(0.65 + p * 0.35, 0.65, 1.0);
+            if (textRef.current.fillOpacity !== titleOpacity) {
+                textRef.current.fillOpacity = titleOpacity;
+                if (textRef.current.material) {
+                    textRef.current.material.opacity = titleOpacity;
+                    textRef.current.material.transparent = true;
+                }
             }
+
+            // Back-of-card texts: reveal with the paint progression
+            const expectedOpacity = p >= 1.0 ? 1.0 : THREE.MathUtils.clamp((p - 0.3) * 2.0, 0.0, 1.0);
+            const applyOpacity = (ref) => {
+                if (ref.current && ref.current.fillOpacity !== expectedOpacity) {
+                    ref.current.fillOpacity = expectedOpacity;
+                    if (ref.current.material) {
+                        ref.current.material.opacity = expectedOpacity;
+                        ref.current.material.transparent = true;
+                    }
+                }
+            };
+            applyOpacity(detailsTextRef1);
+            applyOpacity(detailsTextRef2);
+            applyOpacity(techTextRef);
+            applyOpacity(openTextRef);
+        }
+
+        // Hide the front title whenever the card is flipped/open (or mid-flip) so
+        // it can never render through the paper and collide with the back content.
+        if (textRef.current) {
+            textRef.current.visible = !isSelected && !isAnimating;
         }
 
         // --- Zrównaj pozycję tekstu Z z animacją zaginania i falowania kartki (PRZÓD) ---
@@ -1163,7 +1178,7 @@ const ProjectCard = memo(forwardRef(({ index, project, clothespinTexture, curren
                         ref={openTextRef}
                         position={[0, 0, 0.01]}
                         fontSize={0.11}
-                        color={btnHovered ? "#333333" : "#1c1c1c"}
+                        color={btnHovered ? "#ffe08a" : "#ffffff"}
                         font="/fonts/CabinSketch-Bold.ttf"
                         anchorX="center"
                         anchorY="middle"
@@ -1195,7 +1210,7 @@ const ProjectCard = memo(forwardRef(({ index, project, clothespinTexture, curren
                         }}
                     >
                         <planeGeometry args={[1.2, 1.2 / 3.613]} />
-                        <meshBasicMaterial color="#e0e0e0" transparent={true} opacity={0} />
+                        <meshBasicMaterial color="#ffffff" transparent={true} opacity={0} />
                     </mesh>
                 </group>
 
@@ -1338,7 +1353,7 @@ const RightSideHouses = ({ texture, baseWidth, baseHeight, cropAmount }) => {
     return (
         <mesh position={[newX, -1, -9]} scale={[-1, 1, 1]}>
             <planeGeometry args={[newWidth, baseHeight]} />
-            <meshBasicMaterial color="#e0e0e0"
+            <meshBasicMaterial color="#ffffff"
                 map={croppedTexture}
                 transparent={true}
                 alphaTest={0.1}

@@ -251,7 +251,7 @@ const IntroMilestone = ({ z, scrollProgressRef }) => {
             {/* Avatar on cloud - floating + spreads up-left */}
             <mesh ref={avatarRef} position={[0, baseY, 0]}>
                 <planeGeometry args={[avatarWidth, avatarHeight]} />
-                <meshBasicMaterial color="#e0e0e0"
+                <meshBasicMaterial color="#ffffff"
                     map={avatarTexture}
                     transparent
                     side={THREE.DoubleSide}
@@ -400,7 +400,7 @@ const JourneyMilestone = ({ z, scrollProgressRef }) => {
             <group ref={uoRef} position={[-3.5, -1, 0]}>
                 <mesh>
                     <planeGeometry args={[islandHeight * uoAspect, islandHeight]} />
-                    <meshBasicMaterial color="#e0e0e0"
+                    <meshBasicMaterial color="#ffffff"
                         map={uoTexture}
                         transparent
                         side={THREE.DoubleSide}
@@ -423,7 +423,7 @@ const JourneyMilestone = ({ z, scrollProgressRef }) => {
             <group ref={freelanceRef} position={[3.5, -2, 0.5]}>
                 <mesh>
                     <planeGeometry args={[islandHeight * freelanceAspect, islandHeight]} />
-                    <meshBasicMaterial color="#e0e0e0"
+                    <meshBasicMaterial color="#ffffff"
                         map={freelanceTexture}
                         transparent
                         side={THREE.DoubleSide}
@@ -733,7 +733,7 @@ const SkillBalloon = ({ config, revealFactorRef, spreadFactorRef, timeRef }) => 
                 {/* Painted balloon (behind) - hidden until hover */}
                 <mesh ref={paintedMeshRef} visible={true}>
                     <planeGeometry args={[baseHeight * aspect, baseHeight]} />
-                    <meshBasicMaterial color="#e0e0e0"
+                    <meshBasicMaterial color="#ffffff"
                         ref={paintedMatRef}
                         map={paintedTexture}
                         transparent
