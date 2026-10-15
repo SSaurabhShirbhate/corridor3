@@ -44,6 +44,21 @@ const GlobalOverlay = () => {
         }
     }, [overlayContent]);
 
+    // Escape closes the overlay. Uses the capture phase + stopImmediatePropagation
+    // so it wins over scene-level Escape handlers (e.g. DoorSection's "exit room"),
+    // which would otherwise also fire and tear the room down.
+    useEffect(() => {
+        if (!overlayContent) return undefined;
+        const onKey = (e) => {
+            if (e.key !== 'Escape') return;
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            closeOverlay();
+        };
+        window.addEventListener('keydown', onKey, true);
+        return () => window.removeEventListener('keydown', onKey, true);
+    }, [overlayContent, closeOverlay]);
+
     // Wyłączamy "return null", żeby ciężkie filtry rozmycia i SVG były osadzone w DOM 
     // i nie powodowały zacięć podczas pierwszego wywołania.
     // if (!isVisible && !overlayContent && !cachedContent) return null;
@@ -527,20 +542,22 @@ const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
                             </p>
 
                             {/* Action Button */}
-                            <div style={{
-                                marginTop: 'auto',
-                                paddingTop: '1rem',
-                                ...getStaggerStyle(400)
-                            }}>
-                                <a
-                                    href={content.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="studio-action-button"
-                                >
-                                    Open Link ↗
-                                </a>
-                            </div>
+                            {content.url ? (
+                                <div style={{
+                                    marginTop: 'auto',
+                                    paddingTop: '1rem',
+                                    ...getStaggerStyle(400)
+                                }}>
+                                    <a
+                                        href={content.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="studio-action-button"
+                                    >
+                                        Open Link ↗
+                                    </a>
+                                </div>
+                            ) : null}
                         </>
                     )}
                 </div>

@@ -1,5 +1,7 @@
 import { useScene } from '../../context/SceneContext';
-import { useGalleryProjects, useStudioContent } from '../../hooks/useSanityData';
+import { useGalleryProjects } from '../../hooks/useSanityData';
+import STUDIO_DOCUMENTS from '../../data/studio-documents';
+import STUDIO_REELS from '../../data/studio-skills';
 import '../../styles/ScreenReaderOverlay.scss';
 
 /**
@@ -10,11 +12,11 @@ import '../../styles/ScreenReaderOverlay.scss';
  * Visually hidden via .sr-only but fully accessible to assistive tech.
  */
 const ScreenReaderOverlay = () => {
-    const { hasEntered, isInRoom, currentRoom, teleportTo, requestExit } = useScene();
+    const { hasEntered, isInRoom, currentRoom, teleportTo, requestExit, openOverlay } = useScene();
     
     // Pobieranie danych do wygenerowania niewidocznego HTML-a dla SEO / robotów
     const projects = useGalleryProjects();
-    const studio = useStudioContent();
+    const studio = STUDIO_DOCUMENTS;
 
     return (
         <div className="sr-overlay" role="complementary" aria-label="Accessible navigation for 3D portfolio">
@@ -105,19 +107,48 @@ const ScreenReaderOverlay = () => {
                         )}
                         {currentRoom === 'studio' && (
                             <div aria-label="Studio room content">
-                                <h3>The Studio</h3>
-                                <p>Explore my experience and skills on rotating monitors. Click a monitor to read detailed information about my work.</p>
+                                <h3>The Studio — The Letterpress</h3>
+                                <p>A hand-drawn print shop. Each type form in the case is a skill category; load a form into the press, then pull the flywheel and the platen clamps down — printing a poster that lists that category's skills. Hover a form to paint it from black-and-white sketch to colour, click to load it, then pull the wheel (or press Enter) to print. Posters stack up on the side table; a skill row on the poster or a finished poster opens the matching project.</p>
+
+                                {STUDIO_REELS.map((reel) => (
+                                    <div key={reel.id}>
+                                        <h4>{reel.label} — {reel.subtitle}</h4>
+                                        <ul>
+                                            {reel.skills.map((skill) => (
+                                                <li key={skill.id}>
+                                                    <strong>{skill.name}</strong> — {skill.note}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))}
 
                                 {studio && studio.length > 0 && (
-                                    <ul>
-                                        {studio.map((s, i) => (
-                                            <li key={i}>
-                                                <h4>{s.title} ({s.platform})</h4>
-                                                <p>{s.description}</p>
-                                                {s.url && <a href={s.url}>View content</a>}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                    <>
+                                        <h4>Projects &amp; write-ups</h4>
+                                        <ul>
+                                            {studio.map((s) => (
+                                                <li key={s.id}>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => openOverlay({
+                                                            title: s.title,
+                                                            description: s.summary,
+                                                            date: (s.tags || []).join(' · '),
+                                                            url: s.url,
+                                                            layout: 'default',
+                                                            platformConfig: { label: 'STUDIO RECORD' },
+                                                        })}
+                                                    >
+                                                        {s.title}
+                                                    </button>
+                                                    <p>{s.summary}</p>
+                                                    {(s.tags || []).length > 0 && <p>Tags: {s.tags.join(', ')}</p>}
+                                                    {s.url && <a href={s.url}>View {s.title}</a>}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
                                 )}
                             </div>
                         )}

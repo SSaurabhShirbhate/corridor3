@@ -24,6 +24,9 @@ class RevealMaterial extends THREE.MeshBasicMaterial {
             startDist: -25.0, endDist: 25.0,
             noiseAxes: 'xz'
         };
+        // Sweep axis for the uProgress wipe. Default (0,-1) reproduces the
+        // original bottom-to-top reveal; rooms can set a diagonal axis.
+        this._sweepDir = new THREE.Vector2(0.0, -1.0);
     }
 
     get uProgress() { return this._uProgress; }
@@ -47,6 +50,16 @@ class RevealMaterial extends THREE.MeshBasicMaterial {
         this._paintConfig = { ...this._paintConfig, ...v };
     }
 
+    get sweepDir() { return this._sweepDir; }
+    set sweepDir(v) {
+        if (!v) return;
+        if (Array.isArray(v)) this._sweepDir.set(v[0], v[1]);
+        else this._sweepDir.copy(v);
+        if (this._shader) {
+            this._shader.uniforms.uSweepDir.value = this._sweepDir;
+        }
+    }
+
     // Ensure Three.js doesn't reuse a cached standard shader program
     customProgramCacheKey() {
         return this._paintProgress ? 'RevealMaterial_v3_paint' : 'RevealMaterial_v3';
@@ -55,6 +68,7 @@ class RevealMaterial extends THREE.MeshBasicMaterial {
     onBeforeCompile(shader) {
         this._shader = shader;
         shader.uniforms.uProgress = { value: this._uProgress };
+        shader.uniforms.uSweepDir = { value: this._sweepDir };
 
         const hasPaint = !!this._paintProgress;
         if (hasPaint) {
@@ -87,6 +101,7 @@ class RevealMaterial extends THREE.MeshBasicMaterial {
             '#include <common>',
             /* glsl */`#include <common>
             uniform float uProgress;
+            uniform vec2 uSweepDir;
             ${paintUniformsStr}
 
             float revealRand(vec2 n) { 
@@ -111,10 +126,10 @@ class RevealMaterial extends THREE.MeshBasicMaterial {
             '#include <alphatest_fragment>',
             /* glsl */`#include <alphatest_fragment>
 
-            // Brush-stroke reveal: progressively discard pixels from bottom to top
+            // Brush-stroke reveal: progressively discard pixels along the sweep axis
             if (uProgress > 0.001) {
                 float rn = revealNoise(vMapUv * 15.0) * 0.15;
-                float maskValue = (1.0 - vMapUv.y) + rn;
+                float maskValue = dot(vMapUv - 0.5, uSweepDir) + 0.5 + rn;
                 float threshold = uProgress * 1.5;
                 if (maskValue < threshold) discard;
             }

@@ -234,69 +234,42 @@ export const ABOUT_TEXTURES = [
     '/textures/clouds/f6e358bc-d27c-41dd-95f4-6787a835c41e.webp',
 ];
 
-// Studio Room textures (loaded via useLoader(TextureLoader))
+// Studio Room textures (loaded via useTexture - drei)
 export const STUDIO_TEXTURES = [
-    // Monitor (blog)
-    '/textures/studio/monitor_front.webp',
-    '/textures/studio/monitor_front_painted.webp',
-    '/textures/studio/monitor_back.webp',
-    '/textures/studio/monitor_back_painted.webp',
-    '/textures/studio/monitor_top.webp',
-    '/textures/studio/monitor_top_painted.webp',
-    '/textures/studio/monitor_bottom.webp',
-    '/textures/studio/monitor_bottom_painted.webp',
-    '/textures/studio/monitor_left.webp',
-    '/textures/studio/monitor_left_painted.webp',
-    '/textures/studio/monitor_right.webp',
-    '/textures/studio/monitor_right_painted.webp',
-    // TV (youtube)
-    '/textures/studio/tv_front.webp',
-    '/textures/studio/tv_front_painted.webp',
-    '/textures/studio/tv_back.webp',
-    '/textures/studio/tv_back_painted.webp',
-    '/textures/studio/tv_top.webp',
-    '/textures/studio/tv_top_painted.webp',
-    '/textures/studio/tv_bottom.webp',
-    '/textures/studio/tv_bottom_painted.webp',
-    '/textures/studio/tv_side.webp',
-    '/textures/studio/tv_side_painted.webp',
-    // Phone (tiktok)
-    '/textures/studio/phone_front.webp',
-    '/textures/studio/phone_front_painted.webp',
-    '/textures/studio/phone_back.webp',
-    '/textures/studio/phone_back_painted.webp',
-    '/textures/studio/phone_side.webp',
-    '/textures/studio/phone_side_painted.webp',
-    // Custom content front textures
-    '/textures/studio/monitorfront_postnafbdoublewinner.webp',
-    '/textures/studio/monitorfront_postnafbdoublewinner_painted.webp',
-    '/textures/studio/phonefront_followmeontiktok.webp',
-    '/textures/studio/phonefront_followmeontiktok_painted.webp',
-    '/textures/studio/tvfront_filmikedytowaniezdjec.webp',
-    '/textures/studio/tvfront_filmikedytowaniezdjec_painted.webp',
-    '/textures/studio/tvfront_filmikprojektdlamultiego.webp',
-    '/textures/studio/tvfront_filmikprojektdlamultiego_painted.webp',
+    // The Letterpress: press frame, platen, flywheel, type forms, poster sheet
+    '/textures/studio/press.webp',
+    '/textures/studio/press_painted.webp',
+    '/textures/studio/platen.webp',
+    '/textures/studio/platen_painted.webp',
+    '/textures/studio/flywheel.webp',
+    '/textures/studio/flywheel_painted.webp',
+    '/textures/studio/type_form.webp',
+    '/textures/studio/type_form_painted.webp',
+    '/textures/studio/sheet.webp',
+    '/textures/studio/ink_pot.webp',
+    '/textures/studio/ink_pot_painted.webp',
+    '/textures/studio/dust.webp',
 ];
 
 // ============================================
 // COMBINED EXPORTS
 // ============================================
 
-// Textures loaded via useTexture (drei) - entrance, corridor, UI, gallery, contact
+// Textures loaded via useTexture (drei) - entrance, corridor, UI, gallery, contact, studio
 export const PRELOAD_ALL = [
     ...ENTRANCE_TEXTURES,
     ...CORRIDOR_TEXTURES,
     ...UI_TEXTURES,
     ...GALLERY_TEXTURES,
     ...CONTACT_TEXTURES,
+    ...STUDIO_TEXTURES,
     ...IMAGE_ASSETS,
 ];
 
 
-// Textures loaded via useLoader(TextureLoader) - about, studio
+// Textures loaded via useLoader(TextureLoader) - about
 export const PRELOAD_LOADER = [
     ...ABOUT_TEXTURES,
-    ...STUDIO_TEXTURES,
 ];
 
 /**

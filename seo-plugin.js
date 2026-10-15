@@ -3,6 +3,9 @@
 // removed in favor of hardcoded data so the site never depends on the
 // original author's Sanity project.
 
+import STUDIO_DOCUMENTS from './src/data/studio-documents.js';
+import STUDIO_REELS from './src/data/studio-skills.js';
+
 const SITE = {
     domain: 'https://saurabh-portfolio.pages.dev',
     siteTitle: 'Saurabh Shirbhate | Software Developer Portfolio',
@@ -44,7 +47,19 @@ const PROJECTS = [
     },
 ];
 
-const STUDIO = [];
+// Studio documents — mirrors src/data/studio-documents.js so the crawlable
+// text and the 3D "Letterpress" room can never drift apart.
+const STUDIO = STUDIO_DOCUMENTS.map((doc) => ({
+    title: doc.title,
+    description: doc.summary,
+    url: doc.url || '',
+    platform: 'article',
+    tags: doc.tags || [],
+}));
+
+// Studio skills — mirrors src/data/studio-skills.js (the forms printed on the
+// Letterpress) so the crawlable skills list stays in sync with the scene.
+const SKILL_REELS = STUDIO_REELS;
 const AWARDS = [];
 const FAQ_LIST = [];
 
@@ -314,6 +329,14 @@ function buildLlmsTxt(globalInfo, projects, studio, awards, faqList) {
     return content;
 }
 
+// Minimal HTML escaping for the crawlable studio section.
+const escapeHtml = (str) =>
+    String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+
 export function generateSeoHtml() {
     let cachedLlmsContent = '';
 
@@ -370,6 +393,29 @@ export function generateSeoHtml() {
                 seoHtml += `  <section id="projects">\n    <h2>Projects</h2>\n    <ul>\n`;
                 PROJECTS.forEach(p => {
                     seoHtml += `      <li>\n        <h3>${p.title}</h3>\n        <p>${p.description || ''}</p>\n        ${p.url ? `<a href="${p.url}">Visit ${p.title}</a>\n` : ''}      </li>\n`;
+                });
+                seoHtml += `    </ul>\n  </section>\n`;
+            }
+
+            if (SKILL_REELS.length > 0) {
+                seoHtml += `  <section id="studio">\n    <h2>The Letterpress &mdash; Skills &amp; Tools</h2>\n`;
+                seoHtml += `    <p>A hand-drawn print shop: each type form is a skill category, loaded into the press and printed onto a poster one skill at a time.</p>\n`;
+                SKILL_REELS.forEach(reel => {
+                    seoHtml += `    <h3>${escapeHtml(reel.label)}</h3>\n`;
+                    seoHtml += `    <p>${escapeHtml(reel.subtitle || '')}</p>\n    <ul>\n`;
+                    reel.skills.forEach(skill => {
+                        seoHtml += `      <li><strong>${escapeHtml(skill.name)}</strong> &mdash; ${escapeHtml(skill.note || '')}</li>\n`;
+                    });
+                    seoHtml += `    </ul>\n`;
+                });
+                seoHtml += `  </section>\n`;
+            }
+
+            if (STUDIO.length > 0) {
+                seoHtml += `  <section id="studio-records">\n    <h2>Projects &amp; Write-ups</h2>\n    <ul>\n`;
+                STUDIO.forEach(s => {
+                    const tags = s.tags && s.tags.length > 0 ? `        <p>Tags: ${escapeHtml(s.tags.join(', '))}</p>\n` : '';
+                    seoHtml += `      <li>\n        <h3>${escapeHtml(s.title)}</h3>\n        <p>${escapeHtml(s.description || '')}</p>\n${tags}        ${s.url ? `<a href="${s.url}">Open ${escapeHtml(s.title)}</a>\n` : ''}      </li>\n`;
                 });
                 seoHtml += `    </ul>\n  </section>\n`;
             }

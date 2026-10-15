@@ -28,7 +28,7 @@ const ROOM_META = {
     studio: {
         path: '/studio',
         title: 'The Studio — Saurabh Shirbhate Portfolio',
-        description: 'Explore Saurabh Shirbhate\'s content studio — videos, posts, and articles displayed on floating monitors in an immersive 3D space.',
+        description: 'Step into the Letterpress — a hand-drawn print shop where each type form is a skill category (backend, frontend, data, DevOps, AI) printed onto a poster.',
     },
     contact: {
         path: '/contact',
