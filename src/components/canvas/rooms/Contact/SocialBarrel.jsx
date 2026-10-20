@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useTexture, Text } from '@react-three/drei';
 import * as THREE from 'three';
@@ -99,6 +99,13 @@ const SocialBarrel = ({ position, rotation = [0, 0, 0], texturePath, label, onCl
         });
     };
 
+    // Fit the label to the barrel body so long words (LINKEDIN, GITHUB...) never
+    // spill past the artwork. CabinSketch-Bold averages roughly 0.60em per glyph.
+    const boardWidth = scale[0] * 0.54;
+    const labelFontSize = label
+        ? Math.min(scale[0] * 0.12, boardWidth / (Math.max(label.length, 1) * 0.6))
+        : scale[0] * 0.12;
+
     return (
         <group
             ref={meshRef}
@@ -110,8 +117,7 @@ const SocialBarrel = ({ position, rotation = [0, 0, 0], texturePath, label, onCl
             }}
             onPointerOver={handlePointerOver}
             onPointerOut={handlePointerOut}
-        >
-            {/* Painted Layer (Behind) */}
+        >            {/* Painted Layer (Behind) */}
             <mesh ref={paintedRef} position={[0, 0, -0.001]} visible={false}>
                 <planeGeometry args={scale} />
                 <meshBasicMaterial color="#ffffff"
@@ -143,7 +149,7 @@ const SocialBarrel = ({ position, rotation = [0, 0, 0], texturePath, label, onCl
                     ref={textRef}
                     position={[0, scale[1] * 0.26, 0.05]} // Adjust Y position to hit the wooden board on top of the barrel
                     rotation={[0, 0, 0.03]} // Slight tilt to match a drawn wooden board
-                    fontSize={scale[0] * 0.14}
+                    fontSize={labelFontSize}
                     font="/fonts/CabinSketch-Bold.ttf"
                     color="#111111"
                     fillOpacity={paintUniforms ? 0 : 1}

@@ -4,6 +4,7 @@ import { Text, PositionalAudio } from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import SkyChunk, { CHUNK_LENGTH, ROOM_Z } from './SkyChunk';
+import WavingAvatar from '../../shared/WavingAvatar';
 import '../../shaders/RevealBasicMaterial'; // Registers brush-stroke reveal for BasicMaterial
 import { isTouchDevice } from '../../../../utils/deviceDetect';
 
@@ -138,11 +139,6 @@ const InfiniteSkyManager = ({ scrollProgressRef }) => {
  * Elements spread apart as they approach camera
  */
 const IntroMilestone = ({ z, scrollProgressRef }) => {
-    // Load avatar texture
-    const avatarTexture = useLoader(THREE.TextureLoader, '/textures/about/awatarnachmurce.webp');
-    const { camera, viewport } = useThree();
-    const isTouch = isTouchDevice();
-
     // Refs for all animated elements
     const groupRef = useRef();
     const titleRef = useRef();
@@ -152,13 +148,10 @@ const IntroMilestone = ({ z, scrollProgressRef }) => {
     const motto2Ref = useRef();
 
     // Base positions
-    const baseY = 2;
+    const baseY = 2.125;
 
-    // Calculate aspect ratio
-    // LEGACY FIX: Use original dimensions (2816x1536) to prevent stretching
-    const legacyAspectRatio = 2816 / 1536; 
-    const avatarWidth = 6; // Zwiększony rozmiar awatara na chmurce
-    const avatarHeight = avatarWidth / legacyAspectRatio;
+    // Avatar sizing (full-body sprite sheet frame)
+    const avatarHeight = 2.55;
 
     // Animation: floating + spread apart when close
     useFrame((state) => {
@@ -228,6 +221,8 @@ const IntroMilestone = ({ z, scrollProgressRef }) => {
                 position={[0, 5, 0.1]}
                 fontSize={0.6}
                 color="#1a1a1a"
+                outlineWidth={0.018}
+                outlineColor="#1a1a1a"
                 anchorX="center"
                 anchorY="middle"
                 font="/fonts/RubikScribble-Regular.ttf"
@@ -240,7 +235,9 @@ const IntroMilestone = ({ z, scrollProgressRef }) => {
                 ref={brandRef}
                 position={[0, 4.3, 0.1]}
                 fontSize={0.45}
-                color="#4a4a4a"
+                color="#333333"
+                outlineWidth={0.014}
+                outlineColor="#333333"
                 anchorX="center"
                 anchorY="middle"
                 font="/fonts/CabinSketch-Regular.ttf"
@@ -248,23 +245,19 @@ const IntroMilestone = ({ z, scrollProgressRef }) => {
                 (SS)
             </Text>
 
-            {/* Avatar on cloud - floating + spreads up-left */}
-            <mesh ref={avatarRef} position={[0, baseY, 0]}>
-                <planeGeometry args={[avatarWidth, avatarHeight]} />
-                <meshBasicMaterial color="#ffffff"
-                    map={avatarTexture}
-                    transparent
-                    side={THREE.DoubleSide}
-                    depthWrite={false}
-                />
-            </mesh>
+            {/* Avatar - 3D character waving, floats + spreads up-left */}
+            <group ref={avatarRef} position={[0, baseY, 0]}>
+                <WavingAvatar height={avatarHeight} />
+            </group>
 
             {/* Motto - Line 1 (spreads right) */}
             <Text
                 ref={motto1Ref}
                 position={[0, 0, 0.1]}
                 fontSize={0.32}
-                color="#555555"
+                color="#444444"
+                outlineWidth={0.012}
+                outlineColor="#ffffff"
                 anchorX="center"
                 anchorY="middle"
                 font="/fonts/CabinSketch-Regular.ttf"
@@ -278,7 +271,9 @@ const IntroMilestone = ({ z, scrollProgressRef }) => {
                 ref={motto2Ref}
                 position={[0, -0.5, 0]}
                 fontSize={0.32}
-                color="#555555"
+                color="#444444"
+                outlineWidth={0.012}
+                outlineColor="#ffffff"
                 anchorX="center"
                 anchorY="middle"
                 font="/fonts/CabinSketch-Regular.ttf"

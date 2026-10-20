@@ -70,7 +70,14 @@ const CorridorSegment = ({
                 : index === 2
                 ? '#efe6f5'
                 : '#f5e6e6',
-            enterDistance: door.roomId === 'about' ? 25 : undefined
+            // About needs a long flight into the open sky; the Studio sits
+            // close to its camera rest, so a shorter flight keeps the whole
+            // letterpress (sheet, wheel and type case) inside the frame.
+            enterDistance: door.roomId === 'about'
+                ? 25
+                : door.roomId === 'studio'
+                ? 6.5
+                : undefined
         }));
 
         return doorDefs.map(def => {
@@ -112,7 +119,7 @@ const CorridorSegment = ({
                 <HeroText position={[0, -0.1, -0.5]} />
 
                 {/* Avatar stands to the right so the name stays readable */}
-                <Avatar position={[1.55, -0.85, 0.2]} />
+                <Avatar position={[1.55, -0.785, 0.2]} />
 
 
                 {/* Doodles around avatar */}

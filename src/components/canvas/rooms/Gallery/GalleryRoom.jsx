@@ -692,7 +692,6 @@ const ProjectCard = memo(forwardRef(({ index, project, clothespinTexture, curren
     const cardRef = useRef();
     const paperRef = useRef(); // Ref for the moving part (Paper)
     const materialRef = useRef();
-    const textRef = useRef(); // Ref for the text that sticks to the paper
     const buttonGroupRef = useRef(); // Ref for the interactive back button
     const detailsGroupRef = useRef(); // Ref for the project details on the back
     const techStackGroupRef = useRef(); // Ref for the tech stack section on the back
@@ -946,23 +945,10 @@ const ProjectCard = memo(forwardRef(({ index, project, clothespinTexture, curren
     useFrame((state) => {
         if (!cardRef.current) return;
 
-        // Custom GSAP Paint logic for texts
-        // The project title is always readable on the card front; the back-of-card
-        // texts still fade in with the paint progression so they only show when flipped.
-        if (textRef.current && paintProgress) {
+        // Back-of-card texts fade in with the paint progression so they only show when flipped.
+        if (paintProgress) {
             const p = paintProgress.value;
 
-            // Front title: keep it clearly visible, only slightly delayed by the paint pass
-            const titleOpacity = THREE.MathUtils.clamp(0.65 + p * 0.35, 0.65, 1.0);
-            if (textRef.current.fillOpacity !== titleOpacity) {
-                textRef.current.fillOpacity = titleOpacity;
-                if (textRef.current.material) {
-                    textRef.current.material.opacity = titleOpacity;
-                    textRef.current.material.transparent = true;
-                }
-            }
-
-            // Back-of-card texts: reveal with the paint progression
             const expectedOpacity = p >= 1.0 ? 1.0 : THREE.MathUtils.clamp((p - 0.3) * 2.0, 0.0, 1.0);
             const applyOpacity = (ref) => {
                 if (ref.current && ref.current.fillOpacity !== expectedOpacity) {
@@ -977,30 +963,6 @@ const ProjectCard = memo(forwardRef(({ index, project, clothespinTexture, curren
             applyOpacity(detailsTextRef2);
             applyOpacity(techTextRef);
             applyOpacity(openTextRef);
-        }
-
-        // Hide the front title whenever the card is flipped/open (or mid-flip) so
-        // it can never render through the paper and collide with the back content.
-        if (textRef.current) {
-            textRef.current.visible = !isSelected && !isAnimating;
-        }
-
-        // --- Zrównaj pozycję tekstu Z z animacją zaginania i falowania kartki (PRZÓD) ---
-        if (textRef.current && materialRef.current) {
-            const y = textRef.current.position.y;
-            const uBend = materialRef.current.bend;
-            const uWindStrength = materialRef.current.windStrength || 0;
-            const uTime = state.clock.getElapsedTime();
-
-            const bendAmount = Math.pow(y, 2.0) * uBend;
-            const totalWind = 0.02 + uWindStrength;
-            const flutter = Math.sin(uTime * 2.0 + y * 2.0) * totalWind * (1.0 + Math.abs(uBend * 3.0));
-
-            textRef.current.position.z = bendAmount + flutter + 0.02;
-
-            // Obrót tekstu by przylegał do krzywizny (pochodna dz/dy)
-            const dz_dy = 2.0 * y * uBend + 2.0 * Math.cos(uTime * 2.0 + y * 2.0) * totalWind * (1.0 + Math.abs(uBend * 3.0));
-            textRef.current.rotation.x = Math.atan(dz_dy);
         }
 
         // --- Zrównaj pozycję przycisku Z z animacją pleców (TYŁ) ---
@@ -1283,32 +1245,6 @@ const ProjectCard = memo(forwardRef(({ index, project, clothespinTexture, curren
                         })}
                     </group>
                 </group>
-
-                {/* 
-                  === TEKST / TYTUŁY PROJEKTÓW ===
-                  Tu możesz łatwo dostosować wygląd każdego napisu.
-                  
-                  position: [X, Y, Z] 
-                  > X to lewo/prawo (0 to środek)
-                  > Y to góra/dół (np. 0.75 to góra kartki, -0.75 dół)
-                  > Z nie ruszać. Skrypt powyżej sam wylicza Z, żeby napis zginał się i przyklejał do fali kartki!
-                  
-                  fontSize: rozmiar fontu (domyślnie 0.15)
-                  color: kolor napisu
-                  font: opcjonalnie dajesz tu inną czcionkę z folderu /public/fonts/
-                */}
-                <Text
-                    ref={textRef}
-                    position={[0, 0.7, 0]} // Tylko dwa pierwsze parametry [X, Y] mają tutaj znaczenie
-                    fontSize={0.20}
-                    color="#1c1c1c"
-                    font="/fonts/CabinSketch-Bold.ttf"
-                    anchorX="center"
-                    anchorY="middle"
-                    fillOpacity={0} // Start hidden
-                >
-                    {project.title}
-                </Text>
 
                 <PositionalAudio
                     ref={paperAudioRef}

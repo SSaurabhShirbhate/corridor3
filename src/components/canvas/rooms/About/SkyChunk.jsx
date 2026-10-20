@@ -49,7 +49,7 @@ const SkyChunk = ({ chunkIndex = 0, seed = 0, scrollProgressRef }) => {
                 id: `${chunkIndex}-${i}`,
                 position: [x, y, z],
                 scale: 0.8 + random() * 1.5,
-                baseOpacity: 0.5 + random() * 0.4,
+                baseOpacity: 0.9 + random() * 0.1,
                 textureIndex: Math.floor(random() * CLOUD_TEXTURES.length),
                 // Animation properties - unique per cloud
                 driftSpeed: 0.3 + random() * 0.4,  // How fast it sways

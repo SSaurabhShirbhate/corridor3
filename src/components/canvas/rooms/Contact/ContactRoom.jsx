@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Text, PositionalAudio } from '@react-three/drei';
 import * as THREE from 'three';
@@ -164,6 +164,27 @@ const ContactRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
 
     const [isTransitioning, setIsTransitioning] = useState(false);
 
+    // Fade the ocean out towards the horizon so the planes' far edges don't
+    // cut a razor-sharp line against the sky. localPos is relative to the room
+    // origin (computed by the paint shader), so this keeps working regardless
+    // of where the room chunk sits in the world. Fading by height (not depth)
+    // keeps the haze visible instead of squashing it into a few pixels.
+    const waterOnBeforeCompile = useMemo(() => (shader) => {
+        onBeforeCompile(shader);
+        shader.fragmentShader = shader.fragmentShader.replace(
+            'gl_FragColor.rgb += vec3(glow * 0.4, glow * 0.5, glow * 0.7);',
+            `gl_FragColor.rgb += vec3(glow * 0.4, glow * 0.5, glow * 0.7);
+             float horizonHaze = smoothstep(-0.5, 3.5, localPos.y);
+             gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.98, 0.98, 0.98), horizonHaze);
+             gl_FragColor.a *= 1.0 - horizonHaze;`
+        );
+    }, [onBeforeCompile]);
+
+    // Give the ocean its own shader program so the horizon fade cannot be
+    // dropped by Three's program cache (which keys on material parameters,
+    // not on onBeforeCompile).
+    const waterProgramKey = useMemo(() => () => 'contact-ocean-horizon', []);
+
     const wasTeleportedRef = useRef(false);
     useEffect(() => {
         if (isTeleporting) wasTeleportedRef.current = true;
@@ -297,7 +318,7 @@ const ContactRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
             if (frameCount.current >= FRAMES_TO_WAIT) {
                 hasSignaledReady.current = true;
                 onReady?.();
-                if (!isWarmup) setTimeout(() => showTutorial('contact_submit'), 2000);
+                if (!isWarmup) setTimeout(() => showTutorial('contact_choose'), 2000);
             }
         }
 
@@ -393,7 +414,8 @@ const ContactRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
                             side={THREE.DoubleSide}
                             toneMapped={false}
                             depthWrite={false}
-                            onBeforeCompile={onBeforeCompile}
+                            onBeforeCompile={waterOnBeforeCompile}
+                            customProgramCacheKey={waterProgramKey}
                         />
                     </mesh>
                 ))}
@@ -508,7 +530,7 @@ const ContactRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
                     position={[0, 0.07, 2]}
                     onSend={(data) => {
                         // console.log('📬 Contact form submitted:', data);
-                        unlockAchievement('contact_submit');
+                        unlockAchievement('contact_choose');
                     }}
                 />
             </group>

@@ -1,65 +1,29 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
+import WavingAvatar from '../shared/WavingAvatar';
 
 /**
- * Avatar Component - Hand-drawn sketch style character
- * 
- * New sketchy avatar with WOW effects:
+ * Avatar Component - 3D portfolio character waving.
+ *
+ * Keeps the original behaviour:
  * - Parallax depth effect on scroll
- * - Hand-drawn line style matching entrance
- * - Dodges when camera approaches
- * - Frame-by-frame animation (Boomerang effect: 1-6-1)
+ * - Dodges sideways when the camera gets close
+ * The wave itself is the sprite-sheet flipbook in WavingAvatar
+ * (ping-pong at 20 FPS, like the previous hand-drawn frames).
  */
-const Avatar = ({ position = [10, -20, 30] }) => {
-    const meshRef = useRef();
+const AVATAR_HEIGHT = 1.18;
+
+const Avatar = ({ position = [10, -20, 30], startFrame = 0 }) => {
     const groupRef = useRef();
-    const [dimensions, setDimensions] = useState({ width: 1.2, height: 2.4 });
     const { camera } = useThree();
 
-    // Dodge state
     const dodgeX = useRef(0);
     const targetDodgeX = useRef(0);
     const worldPosVec = useRef(new THREE.Vector3());
 
-    // --- FRAME-BY-FRAME ANIMATION (PING-PONG) ---
-    const TOTAL_FRAMES = 9;
-    const framePaths = Array.from({ length: TOTAL_FRAMES }, (_, i) => `/textures/corridor/avatar_anim/${i + 1}.webp`);
-
-    // Load all texture frames
-    const textures = useTexture(framePaths);
-
-    // Animation control refs
-    // start at index 0 (which refers to 1.webp)
-    const currentFrame = useRef(0);
-    const isReversing = useRef(false);
-    const frameTimer = useRef(0);
-
-    // Apply color space and calculate dimensions once
-    useEffect(() => {
-        textures.forEach(tex => tex.colorSpace = THREE.SRGBColorSpace);
-
-        if (textures[0] && textures[0].image) {
-            const aspectRatio = textures[0].image.width / textures[0].image.height;
-            const baseHeight = 1.55;
-            setDimensions({
-                width: baseHeight * aspectRatio,
-                height: baseHeight
-            });
-        }
-
-        // Set initial texture to avoid white flash, but don't bind it declaratively 
-        // to prevent React from overwriting our useFrame mutations
-        if (meshRef.current && textures[currentFrame.current]) {
-            meshRef.current.material.map = textures[currentFrame.current];
-            meshRef.current.material.needsUpdate = true;
-        }
-    }, [textures]);
-
-    // Main animation loop
-    useFrame((state, delta) => {
-        if (!groupRef.current || !meshRef.current) return;
+    useFrame(() => {
+        if (!groupRef.current) return;
 
         // === DODGE LOGIC ===
         groupRef.current.getWorldPosition(worldPosVec.current);
@@ -84,58 +48,15 @@ const Avatar = ({ position = [10, -20, 30] }) => {
 
         groupRef.current.position.x = position[0] + dodgeX.current;
         groupRef.current.position.y = position[1];
-
-        // === FRAME ANIMATION LOGIC (PING-PONG) ===
-        // Using delta for consistent speed regardless of monitor Hz
-        const FPS = 20; // Prędkość machania (klatki na sekundę)
-        const frameDuration = 1 / FPS;
-
-        frameTimer.current += delta;
-
-        if (frameTimer.current >= frameDuration) {
-            frameTimer.current = 0; // Reset timer
-
-            // Jesteśmy na ostatniej (od prawej)? To machamy do lewej
-            if (currentFrame.current >= TOTAL_FRAMES - 1) {
-                isReversing.current = true;
-            }
-            // Jesteśmy na indeksie 0 (czyli 1.webp)? To machamy z powrotem do prawej
-            else if (currentFrame.current <= 0) {
-                isReversing.current = false;
-            }
-
-            // Przejście klatki
-            if (isReversing.current) {
-                currentFrame.current -= 1;
-            } else {
-                currentFrame.current += 1;
-            }
-
-            // Zabezpieczenie przed błędem indeksu (nie schodzimy poniżej 0)
-            const safeIndex = Math.max(0, Math.min(TOTAL_FRAMES - 1, currentFrame.current));
-
-            // Aplikacja tekstury
-            meshRef.current.material.map = textures[safeIndex];
-            meshRef.current.material.needsUpdate = true;
-        }
     });
 
     return (
         <group ref={groupRef} position={position}>
-            <mesh ref={meshRef} renderOrder={2}>
-                <planeGeometry args={[dimensions.width, dimensions.height]} />
-                <meshBasicMaterial color="#ffffff"
-                    transparent={true}
-                    side={THREE.DoubleSide}
-                    depthWrite={false}
-                    alphaTest={0.15}
-                />
-            </mesh>
+            <WavingAvatar height={AVATAR_HEIGHT} renderOrder={2} startFrame={startFrame} />
         </group>
     );
 };
 
-// Easing function
 const easeOutQuad = (t) => t * (2 - t);
 
 export default Avatar;

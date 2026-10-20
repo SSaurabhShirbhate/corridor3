@@ -307,11 +307,12 @@ const AboutRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
             </mesh>
 
             {/* === SUN GLOW (upper half of the gradient sky) === */}
-            <mesh position={[20, 14, -106]}>
-                <planeGeometry args={[70, 70]} />
+            <mesh position={[36, 16, -106]}>
+                <planeGeometry args={[64, 64]} />
                 <meshBasicMaterial
                     map={sunGlowTexture}
                     transparent
+                    opacity={0.62}
                     depthWrite={false}
                     fog={false}
                     blending={THREE.AdditiveBlending}

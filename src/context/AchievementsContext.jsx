@@ -101,15 +101,21 @@ export const AchievementsProvider = ({ children }) => {
     }, [completed]);
 
     const showTutorial = useCallback((id) => {
-        // Only show if it's a valid achievement, not already completed, and no popup currently active
-        // Also ensure we're not currently hiding another popup
-        if (ACHIEVEMENTS[id] && !completed.includes(id) && (!activePopup || activePopup.status === 'hiding')) {
-            // Slight delay to ensure previous hiding finished
-            setTimeout(() => {
-                setActivePopup({ id, status: 'pending' });
-            }, 50);
-        }
-    }, [completed, activePopup]);
+        // Only show if it's a valid achievement and not already completed
+        if (!ACHIEVEMENTS[id] || completed.includes(id)) return;
+        // Slight delay so it lands after the current frame/render settles
+        setTimeout(() => {
+            setActivePopup(prev => {
+                // Already showing this exact tutorial
+                if (prev && prev.id === id) return prev;
+                // Never interrupt a completion animation that is playing out
+                if (prev && prev.status === 'completed') return prev;
+                // Replace a stale pending/hiding tutorial from another room so the
+                // current room's hint is the one the visitor actually sees.
+                return { id, status: 'pending' };
+            });
+        }, 50);
+    }, [completed]);
 
     const unlockAchievement = useCallback((id) => {
         // Use synchronous ref check to avoid 100x fires during continuous scroll events

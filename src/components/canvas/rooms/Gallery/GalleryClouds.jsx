@@ -44,7 +44,7 @@ const GalleryClouds = ({ count = 12, seed = 42, rotationOffset = [0, -Math.PI / 
                 id: i,
                 position: [initialX, y, z],  // Pozycja już przeliczona!
                 scale: 0.6 + random() * 1.4,
-                opacity: 0.72 + random() * 0.28,
+                opacity: 0.9 + random() * 0.1,
                 textureIndex: Math.floor(random() * CLOUD_TEXTURES.length),
                 driftSpeed: driftSpeed,
                 initialOffset: initialOffset,  // Zapamiętaj offset do animacji

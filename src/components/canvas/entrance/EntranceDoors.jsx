@@ -7,6 +7,7 @@ import '../shaders/RevealMaterial'; // Registers alpha-discard reveal shader
 import { playBackgroundMusic } from '../../../utils/audioManager';
 import { useAchievements } from '../../../context/AchievementsContext';
 import { isTouchDevice } from '../../../utils/deviceDetect';
+import WavingAvatar from '../shared/WavingAvatar';
 
 // Use same font as App.jsx preload (Inter) - works reliably
 const FONT_URL = 'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff';
@@ -76,7 +77,6 @@ const EntranceDoors = ({
     const catFrontBodyTexture = useTexture('/textures/entrance/cat_front_body.webp');
     const windowSketchTexture = useTexture('/textures/entrance/window_sketch.webp');
     const windowBgTexture = useTexture('/textures/entrance/window_bg.webp');
-    const avatarWindowTexture = useTexture('/textures/entrance/avatar_window.webp');
     const plantTexture = useTexture('/textures/corridor/kwiatekwdoniczce.webp');
     const potTexture = useTexture('/textures/entrance/pot_with_duck.webp');
     const bugTexture = useTexture('/textures/entrance/bug_sketch.webp');
@@ -806,18 +806,14 @@ const EntranceDoors = ({
                 color="#fff8e8"
                 distance={10}
             /> */}
-            {/* AVATAR - separate from window group, behind bricks */}
-            <mesh
+            {/* AVATAR - 3D character waving behind the window bricks */}
+            <group
                 ref={windowAvatarRef}
                 position={[3.5, 0, 0.09]}
                 rotation={[0, 0, 0]}
             >
-                <planeGeometry args={[1.5, 1.5]} />
-                <meshBasicMaterial color="#ffffff"
-                    map={avatarWindowTexture}
-                    transparent={true}
-                />
-            </mesh>
+                <WavingAvatar height={1.4} startFrame={2} />
+            </group>
 
             {/* WINDOW BACKGROUND (cartoon sky) - shows through the transparent panes */}
             <mesh position={[2.5, 0, 0.05]}>
