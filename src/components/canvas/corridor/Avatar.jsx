@@ -9,10 +9,10 @@ import WavingAvatar from '../shared/WavingAvatar';
  * Keeps the original behaviour:
  * - Parallax depth effect on scroll
  * - Dodges sideways when the camera gets close
- * The wave itself is the sprite-sheet flipbook in WavingAvatar
- * (ping-pong at 20 FPS, like the previous hand-drawn frames).
+ * The wave itself is a small two-bone rig in WavingAvatar, so it stays
+ * smooth at any frame rate.
  */
-const AVATAR_HEIGHT = 1.18;
+const AVATAR_HEIGHT = 1.55;
 
 const Avatar = ({ position = [10, -20, 30], startFrame = 0 }) => {
     const groupRef = useRef();

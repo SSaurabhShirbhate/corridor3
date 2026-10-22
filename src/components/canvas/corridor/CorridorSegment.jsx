@@ -119,7 +119,7 @@ const CorridorSegment = ({
                 <HeroText position={[0, -0.1, -0.5]} />
 
                 {/* Avatar stands to the right so the name stays readable */}
-                <Avatar position={[1.55, -0.785, 0.2]} />
+                <Avatar position={[1.55, -0.6, 0.2]} />
 
 
                 {/* Doodles around avatar */}

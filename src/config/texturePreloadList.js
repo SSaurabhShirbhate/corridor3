@@ -24,7 +24,11 @@ export const ENTRANCE_TEXTURES = [
     // Characters/Objects
     '/textures/entrance/cat_front_body.webp',
     '/textures/entrance/window_sketch.webp',
-    '/textures/shared/avatar_wave_v2.webp',
+    // Avatar
+    '/textures/avatar/body.webp',
+    '/textures/avatar/upper_arm.webp',
+    '/textures/avatar/forearm.webp',
+    '/textures/avatar/hand.webp',
     '/textures/entrance/pot_with_duck.webp',
     '/textures/entrance/bug_sketch.webp',
     '/textures/entrance/speech_bubble.webp',
@@ -178,7 +182,10 @@ export const CONTACT_TEXTURES = [
 // About Room textures (loaded via useLoader(TextureLoader))
 export const ABOUT_TEXTURES = [
     // Avatar
-    '/textures/shared/avatar_wave_v2.webp',
+    '/textures/avatar/body.webp',
+    '/textures/avatar/upper_arm.webp',
+    '/textures/avatar/forearm.webp',
+    '/textures/avatar/hand.webp',
     // Sky
     '/textures/about/sky_gradient.webp',
     '/textures/about/cloud_sea.webp',

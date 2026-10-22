@@ -148,10 +148,10 @@ const IntroMilestone = ({ z, scrollProgressRef }) => {
     const motto2Ref = useRef();
 
     // Base positions
-    const baseY = 2.125;
+    const baseY = 2.325;
 
-    // Avatar sizing (full-body sprite sheet frame)
-    const avatarHeight = 2.55;
+    // Avatar sizing (full-body cartoon character)
+    const avatarHeight = 2.95;
 
     // Animation: floating + spread apart when close
     useFrame((state) => {

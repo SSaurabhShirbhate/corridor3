@@ -806,13 +806,13 @@ const EntranceDoors = ({
                 color="#fff8e8"
                 distance={10}
             /> */}
-            {/* AVATAR - 3D character waving behind the window bricks */}
+            {/* AVATAR - flat cartoon character waving behind the window */}
             <group
                 ref={windowAvatarRef}
                 position={[3.5, 0, 0.09]}
                 rotation={[0, 0, 0]}
             >
-                <WavingAvatar height={1.4} startFrame={2} />
+                <WavingAvatar height={1.4} startFrame={2} renderOrder={-3} />
             </group>
 
             {/* WINDOW BACKGROUND (cartoon sky) - shows through the transparent panes */}
@@ -828,11 +828,12 @@ const EntranceDoors = ({
                 onPointerLeave={handleWindowLeave}
             >
                 {/* Window Frame Sketch - in front of bricks */}
-                <mesh position={[0, 0, 0.2]}>
+                <mesh position={[0, 0, 0.2]} renderOrder={1}>
                     <planeGeometry args={[1.5, 1.5]} />
                     <meshBasicMaterial color="#ffffff"
                         map={windowSketchTexture}
                         transparent={true}
+                        depthWrite={false}
                     />
                 </mesh>
             </group>
